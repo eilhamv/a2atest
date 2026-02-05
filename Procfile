@@ -1,0 +1,1 @@
+web: cd email-agent && python __main__.py

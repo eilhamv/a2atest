@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+"""
+Email Agent - Remote SaaS agent for A2A multi-agent system
+Demonstrates remote agent integration with Context Forge
+"""
+import asyncio
+import os
 import uvicorn
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
@@ -47,12 +54,17 @@ if __name__ == '__main__':
         ],
     )
     
+    # Get port and URL from environment
+    port = int(os.getenv('PORT', '5004'))
+    railway_url = os.getenv('RAILWAY_PUBLIC_DOMAIN', '')
+    base_url = f'https://{railway_url}' if railway_url else f'http://localhost:{port}'
+    
     # Create Agent Card
     agent_card = AgentCard(
         name='email_agent',
         version='1.0.0',
         description='Remote SaaS email service agent for sending, validating, and tracking emails',
-        url='http://localhost:5004',  # Will be updated to Railway URL after deployment
+        url=base_url,
         protocolVersion='0.3.0',
         capabilities=AgentCapabilities(
             streaming=False,
@@ -78,12 +90,15 @@ if __name__ == '__main__':
         http_handler=request_handler,
     )
     
-    print("📧 Email Agent (Remote SaaS) starting on http://localhost:5004")
-    print("📋 AgentCard: http://localhost:5004/.well-known/agent.json")
+    print(f"📧 Email Agent (Remote SaaS) starting on {base_url}")
+    print(f"📋 AgentCard: {base_url}/.well-known/agent.json")
     print("✨ This agent simulates a remote SaaS email service")
-    print("🚀 Ready to be deployed to Railway.app!")
+    if railway_url:
+        print(f"🚀 Deployed on Railway: https://{railway_url}")
+    else:
+        print("🚀 Running locally - ready to be deployed to Railway.app!")
     
     # Start server
-    uvicorn.run(server.build(), host='0.0.0.0', port=5004)
+    uvicorn.run(server.build(), host='0.0.0.0', port=port)
 
 # Made with Bob

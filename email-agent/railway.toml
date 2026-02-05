@@ -1,8 +1,0 @@
-[build]
-builder = "NIXPACKS"
-watchPatterns = ["**"]
-
-[deploy]
-startCommand = "python __main__.py"
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
