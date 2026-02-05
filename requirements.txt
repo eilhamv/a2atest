@@ -1,24 +1,12 @@
-# A2A Multi-Agent Orchestrator System Requirements
+# A2A Protocol SDK
+a2a-python>=0.3.0
 
-# Core A2A SDK
-a2a-python>=0.1.0
+# Web server
+uvicorn>=0.30.0
+starlette>=0.37.0
 
-# Web Frameworks
-fastapi>=0.104.0
-uvicorn>=0.24.0
-streamlit>=1.28.0
+# Type hints
+typing-extensions>=4.12.0
 
-# HTTP Client
-httpx>=0.25.0
-
-# Environment & Configuration
-python-dotenv>=1.0.0
-
-# Data Validation
-pydantic>=2.0.0
-
-# Authentication
-pyjwt>=2.8.0
-
-# Type Extensions
-typing-extensions>=4.8.0
+# Async support
+httpx>=0.27.0
