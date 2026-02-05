@@ -1,0 +1,13 @@
+INFO:     Started server process [88627]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5004 (Press CTRL+C to quit)
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+📧 Email Agent (Remote SaaS) starting on http://localhost:5004
+📋 AgentCard: http://localhost:5004/.well-known/agent.json
+✨ This agent simulates a remote SaaS email service
+🚀 Ready to be deployed to Railway.app!
+INFO:     127.0.0.1:50513 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+INFO:     127.0.0.1:52745 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52783 - "POST / HTTP/1.1" 200 OK

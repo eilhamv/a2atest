@@ -1,0 +1,196 @@
+10:35:04 - mcpgateway.config - INFO - Using SQLite database. Consider PostgreSQL or MySQL for production.
+10:35:04 - mcpgateway.config - WARNING - 🔓 SECURITY WARNING: Default admin password detected! Please change the BASIC_AUTH_PASSWORD immediately.
+10:35:04 - mcpgateway.config - WARNING - 🔐 SECURITY WARNING: Admin password has low complexity. Should contain at least 3 of: uppercase, lowercase, digits, special characters
+10:35:04 - mcpgateway.config - WARNING - 🔓 SECURITY WARNING - jwt_secret_key: Default/weak secret detected! Please set a strong, unique value for production.
+10:35:04 - mcpgateway.config - WARNING - ⚠️  SECURITY WARNING - jwt_secret_key: Secret should be at least 32 characters long. Current length: 11
+10:35:04 - mcpgateway.config - WARNING - 🔑 SECURITY WARNING - jwt_secret_key: Secret has low entropy. Consider using a more random value.
+10:35:04 - mcpgateway.config - WARNING - 🔓 SECURITY WARNING - auth_encryption_secret: Default/weak secret detected! Please set a strong, unique value for production.
+10:35:04 - mcpgateway.config - WARNING - ⚠️  SECURITY WARNING - auth_encryption_secret: Secret should be at least 32 characters long. Current length: 12
+10:35:04 - mcpgateway.config - WARNING - 🔑 SECURITY WARNING - auth_encryption_secret: Secret has low entropy. Consider using a more random value.
+10:35:04 - mcpgateway.db - INFO - Configuring SQLite with pool_size=50, max_overflow=10
+10:35:05 - mcpgateway.observability - INFO - OTLP endpoint not configured, skipping telemetry init
+10:35:05 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+10:35:06 - alembic.runtime.plugins - INFO - setup plugin alembic.autogenerate.schemas
+10:35:06 - alembic.runtime.plugins - INFO - setup plugin alembic.autogenerate.tables
+10:35:06 - alembic.runtime.plugins - INFO - setup plugin alembic.autogenerate.types
+10:35:06 - alembic.runtime.plugins - INFO - setup plugin alembic.autogenerate.constraints
+10:35:06 - alembic.runtime.plugins - INFO - setup plugin alembic.autogenerate.defaults
+10:35:06 - alembic.runtime.plugins - INFO - setup plugin alembic.autogenerate.comments
+10:35:06 - db_isready - INFO - Probing sqlite at ./mcp.db (timeout=2s, interval=2.0s, max_tries=3)
+10:35:06 - db_isready - INFO - Database ready after 0.02s (attempt 1)
+10:35:06 - mcpgateway - INFO - 🗜️  Response compression enabled: minimum_size=500B, gzip_level=6, brotli_quality=4, zstd_level=3
+10:35:06 - mcpgateway - INFO - 🔒 Input validation and output sanitization middleware enabled
+10:35:06 - mcpgateway - INFO - ✅ Correlation ID tracking enabled (header: X-Correlation-ID)
+10:35:06 - mcpgateway - INFO - 🔐 Authentication context middleware enabled - logging security events
+10:35:06 - mcpgateway - INFO - 🔍 Observability middleware disabled
+/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/routers/log_search.py:679: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+  aggregation: str = Query(_DEFAULT_AGGREGATION_KEY, regex="^(5m|24h)$", description="Aggregation level for metrics"),
+10:35:06 - mcpgateway - INFO - Log search router included - structured logging enabled
+10:35:06 - mcpgateway - INFO - Observability router not included - observability disabled
+10:35:06 - mcpgateway - INFO - A2A router included - A2A features enabled
+10:35:06 - mcpgateway - INFO - Authentication routers included - Auth enabled
+10:35:06 - mcpgateway - INFO - SSO router not included - SSO authentication disabled
+10:35:06 - mcpgateway - INFO - Team management router included - Teams enabled with email auth
+10:35:06 - mcpgateway - INFO - JWT Token Catalog router included - Token management enabled with email auth
+10:35:06 - mcpgateway - INFO - RBAC router included - Role-based access control enabled
+10:35:06 - mcpgateway - INFO - OAuth router included
+10:35:06 - mcpgateway - INFO - Reverse proxy router included
+10:35:06 - mcpgateway - INFO - Admin UI enabled: True
+10:35:06 - mcpgateway - INFO - Admin API enabled: True
+10:35:06 - mcpgateway - INFO - Including admin_router - Admin API enabled
+10:35:06 - mcpgateway - INFO - Mounting static files - UI enabled
+10:35:06 - mcpgateway - INFO - Static assets served from /Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/static at /static
+INFO:     Started server process [41874]
+INFO:     Waiting for application startup.
+10:35:06 - mcpgateway.bootstrap_db - INFO - Running Alembic migrations to ensure schema is up to date
+✅ Metrics instrumentation enabled
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> b77ca9d2de7e, Location: ./mcpgateway/alembic/versions/b77ca9d2de7e_uuid_pk_and_slug_refactor.py
+Copyright 2025
+SPDX-License-Identifier: Apache-2.0
+Authors: Mihai Criveti
+ERROR [asyncio] Task exception was never retrieved
+future: <Task finished name='Task-2' coro=<main() done, defined at /Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/bootstrap_db.py:235> exception=OperationalError('(sqlite3.OperationalError) duplicate column name: id_new')>
+Traceback (most recent call last):
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: duplicate column name: id_new
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/bootstrap_db.py", line 277, in main
+    command.upgrade(cfg, "head")
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/command.py", line 483, in upgrade
+    script.run_env()
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/script/base.py", line 545, in run_env
+    util.load_python_file(self.dir, "env.py")
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/util/pyfiles.py", line 116, in load_python_file
+    module = load_module_py(module_id, path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/util/pyfiles.py", line 136, in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/alembic/env.py", line 283, in <module>
+    run_migrations_online()
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/alembic/env.py", line 276, in run_migrations_online
+    context.run_migrations()
+  File "<string>", line 8, in run_migrations
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/runtime/environment.py", line 969, in run_migrations
+    self.get_context().run_migrations(**kw)
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/runtime/migration.py", line 626, in run_migrations
+    step.migration_fn(**kw)
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/mcpgateway/alembic/versions/b77ca9d2de7e_uuid_pk_and_slug_refactor.py", line 130, in upgrade
+    op.add_column("gateways", sa.Column("id_new", sa.String(36), nullable=True))
+  File "<string>", line 8, in add_column
+  File "<string>", line 3, in add_column
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/operations/ops.py", line 2210, in add_column
+    return operations.invoke(op)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/operations/base.py", line 452, in invoke
+    return fn(self, operation)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/operations/toimpl.py", line 181, in add_column
+    operations.impl.add_column(
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/ddl/impl.py", line 391, in add_column
+    self._exec(
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/alembic/ddl/impl.py", line 256, in _exec
+    return conn.execute(construct, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1419, in execute
+    return meth(
+           ^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/sql/ddl.py", line 187, in _execute_on_connection
+    return connection._execute_ddl(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1530, in _execute_ddl
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/harishankar/miniforge3/envs/mcpdemo/lib/python3.11/site-packages/sqlalchemy/engine/default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) duplicate column name: id_new
+[SQL: ALTER TABLE gateways ADD COLUMN id_new VARCHAR(36)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-02-03 10:35:06,958 - mcpgateway - INFO - Starting MCP Gateway services
+2026-02-03 10:35:06,958 - mcpgateway.observability - INFO - OTLP endpoint not configured, skipping telemetry init
+2026-02-03 10:35:06,958 - mcpgateway - INFO - Observability initialized
+2026-02-03 10:35:06,958 - mcpgateway - INFO - 🔒 Validating security configuration...
+2026-02-03 10:35:06,958 - mcpgateway - WARNING - ============================================================
+2026-02-03 10:35:06,958 - mcpgateway - WARNING - 🚨 SECURITY WARNINGS DETECTED:
+2026-02-03 10:35:06,958 - mcpgateway - WARNING - ============================================================
+2026-02-03 10:35:06,958 - mcpgateway - WARNING -   ⚠️  Using default admin username - consider changing it
+2026-02-03 10:35:06,958 - mcpgateway - WARNING -   💾 SQLite database in use - consider PostgreSQL/MySQL for production
+2026-02-03 10:35:06,958 - mcpgateway - WARNING - ============================================================
+2026-02-03 10:35:06,958 - mcpgateway - WARNING - ============================================================
+2026-02-03 10:35:06,959 - mcpgateway - WARNING - ⚠️  Critical security issues detected (REQUIRE_STRONG_SECRETS=false):
+2026-02-03 10:35:06,959 - mcpgateway - WARNING -   • Admin UI enabled with default password. Set BASIC_AUTH_PASSWORD environment variable!
+2026-02-03 10:35:06,959 - mcpgateway - WARNING - ============================================================
+2026-02-03 10:35:06,959 - mcpgateway - INFO - ✅ Security validation completed
+2026-02-03 10:35:06,959 - mcpgateway - INFO - 🔒 Header Passthrough: DISABLED
+2026-02-03 10:35:06,959 - mcpgateway.services.tool_service - INFO - Initializing tool service
+2026-02-03 10:35:06,959 - mcpgateway.services.resource_service - INFO - Initializing resource service
+2026-02-03 10:35:06,959 - mcpgateway.services.prompt_service - INFO - Initializing prompt service
+2026-02-03 10:35:06,959 - mcpgateway.services.gateway_service - INFO - Initializing gateway service
+2026-02-03 10:35:06,959 - mcpgateway.services.root_service - INFO - Initializing root service
+2026-02-03 10:35:06,959 - mcpgateway.services.completion_service - INFO - Initializing completion service
+2026-02-03 10:35:06,959 - mcpgateway.handlers.sampling - INFO - Initializing sampling handler
+2026-02-03 10:35:06,959 - mcpgateway.services.export_service - INFO - Export service initialized
+2026-02-03 10:35:06,959 - mcpgateway.services.import_service - INFO - Import service initialized
+2026-02-03 10:35:06,959 - mcpgateway.services.a2a_service - INFO - Initializing A2A Agent Service
+2026-02-03 10:35:06,959 - mcpgateway.cache.resource_cache - INFO - Initializing resource cache
+2026-02-03 10:35:06,959 - mcpgateway.transports.streamablehttp_transport - INFO - Initializing Streamable HTTP service
+2026-02-03 10:35:06,959 - mcpgateway.services.gateway_service - INFO - File lock acquired. Running health checks.
+2026-02-03 10:35:06,961 - mcpgateway.services.elicitation_service - INFO - ElicitationService initialized: timeout=60s, max_concurrent=100, cleanup_interval=300s
+2026-02-03 10:35:06,961 - mcpgateway.services.elicitation_service - INFO - Elicitation cleanup task started
+2026-02-03 10:35:06,961 - mcpgateway - INFO - Elicitation service initialized
+2026-02-03 10:35:07,089 - mcpgateway - INFO - All services initialized successfully
+2026-02-03 10:35:07,089 - mcpgateway - INFO - Metrics aggregation auto-start disabled; performance metrics will be generated on-demand when requested.
+2026-02-03 10:35:07,187 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request started: POST /auth/login
+2026-02-03 10:35:07,201 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:07,353 - mcpgateway.services.email_auth_service - INFO - Authentication successful for admin@example.com
+2026-02-03 10:35:07,357 - mcpgateway.routers.auth - INFO - User admin@example.com authenticated successfully
+2026-02-03 10:35:07,359 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request completed: POST /auth/login - 200
+2026-02-03 10:35:07,440 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:07,441 - mcpgateway.middleware.auth_middleware - INFO - ✓ Authenticated user: admin@example.com
+2026-02-03 10:35:07,445 - mcpgateway.services.security_logger - INFO - Authentication attempt: Authentication successful for user admin@example.com
+2026-02-03 10:35:07,446 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request started: GET /admin/events
+2026-02-03 10:35:07,454 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:07,455 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request completed: GET /admin/events - 200
+2026-02-03 10:35:07,485 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:07,486 - mcpgateway.middleware.auth_middleware - INFO - ✓ Authenticated user: admin@example.com
+2026-02-03 10:35:07,487 - mcpgateway.services.security_logger - INFO - Authentication attempt: Authentication successful for user admin@example.com
+2026-02-03 10:35:07,488 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request started: GET /admin/events
+2026-02-03 10:35:07,491 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:07,493 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request completed: GET /admin/events - 200
+2026-02-03 10:35:16,141 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:16,143 - mcpgateway.middleware.auth_middleware - INFO - ✓ Authenticated user: admin@example.com
+2026-02-03 10:35:16,151 - mcpgateway.services.security_logger - INFO - Authentication attempt: Authentication successful for user admin@example.com
+2026-02-03 10:35:16,153 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request started: GET /a2a
+2026-02-03 10:35:16,162 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 10:35:16,179 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request completed: GET /a2a - 200
+2026-02-03 12:41:58,641 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 12:41:58,665 - mcpgateway.middleware.auth_middleware - INFO - ✓ Authenticated user: admin@example.com
+2026-02-03 12:41:58,710 - mcpgateway.services.security_logger - INFO - Authentication attempt: Authentication successful for user admin@example.com
+2026-02-03 12:41:58,747 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 12:41:58,754 - mcpgateway.middleware.auth_middleware - INFO - ✓ Authenticated user: admin@example.com
+2026-02-03 12:41:58,797 - mcpgateway.services.security_logger - INFO - Authentication attempt: Authentication successful for user admin@example.com
+2026-02-03 12:41:58,806 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request started: GET /admin/events
+2026-02-03 12:41:58,938 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request started: GET /admin/events
+2026-02-03 12:41:59,448 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 12:41:59,454 - mcpgateway.services.argon2_service - INFO - Initialized Argon2PasswordService with time_cost=3, memory_cost=65536, parallelism=1
+2026-02-03 12:41:59,457 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request completed: GET /admin/events - 200
+2026-02-03 12:41:59,459 - mcpgateway.services.structured_logger - INFO - [http_gateway] Request completed: GET /admin/events - 200

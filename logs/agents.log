@@ -1,0 +1,60 @@
+🚀 Starting all A2A agents...
+
+🌤️  Starting Weather Agent on port 5001...
+INFO:     Started server process [41927]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5001 (Press CTRL+C to quit)
+🧮 Starting Calculator Agent on port 5002...
+INFO:     Started server process [41938]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5002 (Press CTRL+C to quit)
+✈️  Starting Travel Agent on port 5003...
+INFO:     Started server process [41950]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:5003 (Press CTRL+C to quit)
+
+✅ All agents started!
+
+Agent endpoints:
+  Weather:    http://localhost:5001
+  Calculator: http://localhost:5002
+  Travel:     http://localhost:5003
+
+Press Ctrl+C to stop all agents
+
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+✈️  Travel Agent starting on http://localhost:5003
+📋 AgentCard: http://localhost:5003/.well-known/agent.json
+INFO:     127.0.0.1:62079 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+🧮 Calculator Agent starting on http://localhost:5002
+📋 AgentCard: http://localhost:5002/.well-known/agent.json
+INFO:     127.0.0.1:62081 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+🌤️  Weather Agent starting on http://localhost:5001
+📋 AgentCard: http://localhost:5001/.well-known/agent.json
+INFO:     127.0.0.1:62083 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+INFO:     127.0.0.1:62085 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+INFO:     127.0.0.1:62087 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+Deprecated agent card endpoint '/.well-known/agent.json' accessed. Please use '/.well-known/agent-card.json' instead. This endpoint will be removed in a future version.
+INFO:     127.0.0.1:62089 - "GET /.well-known/agent.json HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41950]
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41938]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [41927]
+scripts/start_all_agents.sh: line 59: 41927 Terminated: 15          python3 __main__.py  (wd: ~/Downloads/a2a/weather-agent)
+scripts/start_all_agents.sh: line 59: 41938 Terminated: 15          python3 calculator_agent.py  (wd: ~/Downloads/a2a/agents)
+scripts/start_all_agents.sh: line 59: 41950 Terminated: 15          python3 travel_agent.py  (wd: ~/Downloads/a2a/agents)

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2A Multi-Agent Orchestrator Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 20px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 30px 90px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .config-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .architecture {
+            position: relative;
+            width: 100%;
+            height: 1000px;
+            margin: 40px 0;
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 40px;
+            overflow: visible;
+        }
+        
+        /* Components */
+        .component {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid transparent;
+            z-index: 10;
+        }
+        
+        .component:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+        }
+        
+        .component.active {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .component-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .component-icon {
+            font-size: 1.5em;
+        }
+        
+        .component-detail {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin: 6px 0;
+        }
+        
+        .component-port {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #333;
+            margin-top: 8px;
+        }
+        
+        /* User Component */
+        .user-component {
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .user-component .component-detail,
+        .user-component .component-port {
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Orchestrator Component */
+        .orchestrator-component {
+            top: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .orchestrator-component .component-detail,
+        .orchestrator-component .component-port {
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Context Forge Component */
+        .cf-component {
+            top: 380px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 340px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .cf-component .component-detail,
+        .cf-component .component-port {
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Virtual Server Containers */
+        .vs-container {
+            position: absolute;
+            border-radius: 20px;
+            padding: 20px;
+            z-index: 5;
+        }
+        
+        .vs-container-active {
+            top: 560px;
+            left: 5%;
+            width: 45%;
+            height: 380px;
+            background: rgba(67, 233, 123, 0.1);
+            border: 3px solid #2ecc71;
+        }
+        
+        .vs-container-inactive {
+            top: 560px;
+            right: 5%;
+            width: 45%;
+            height: 380px;
+            background: rgba(224, 224, 224, 0.3);
+            border: 3px dashed #bbb;
+        }
+        
+        /* Virtual Servers */
+        .vs-header {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            border: 4px solid #2ecc71;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+        
+        .vs-header-inactive {
+            background: #e0e0e0;
+            color: #999;
+            border: 4px dashed #bbb;
+            opacity: 0.6;
+        }
+        
+        .vs-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .vs-detail {
+            font-size: 0.9em;
+            margin: 4px 0;
+        }
+        
+        .vs-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 700;
+            margin-top: 8px;
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Container labels */
+        .container-label {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 15;
+        }
+        
+        .container-label.active {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .container-label.inactive {
+            background: #bbb;
+            color: #666;
+        }
+        
+        /* Agent Grid */
+        .agent-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        /* Agent Components */
+        .agent-component {
+            flex: 1;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .agent-component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+        }
+        
+        .agent-component.active {
+            border: 3px solid #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .agent-component .component-detail,
+        .agent-component .component-port {
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .agent-component .component-title {
+            font-size: 1.1em;
+        }
+        
+        /* Inactive agents */
+        .agent-inactive {
+            background: #d0d0d0;
+            color: #888;
+            opacity: 0.5;
+        }
+        
+        .agent-inactive .component-detail,
+        .agent-inactive .component-port {
+            color: #666;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .skill-list {
+            font-size: 0.8em;
+            margin-top: 8px;
+            padding-left: 16px;
+        }
+        
+        .skill-list li {
+            margin: 4px 0;
+        }
+        
+        /* Animated Connections - OVERLAY */
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .connection {
+            fill: none;
+            stroke: #FF3366;
+            stroke-width: 6;
+            opacity: 0;
+            transition: opacity 0.3s;
+            filter: drop-shadow(0 0 8px rgba(255, 51, 102, 0.6));
+        }
+        
+        .connection.active {
+            opacity: 1;
+            animation: dash 2s linear infinite;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -30;
+            }
+        }
+        
+        .pulse {
+            fill: #FF3366;
+            opacity: 0;
+            filter: drop-shadow(0 0 10px rgba(255, 51, 102, 0.8));
+        }
+        
+        .pulse.active {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0;
+                r: 8;
+            }
+            50% {
+                opacity: 1;
+                r: 16;
+            }
+        }
+        
+        /* Control Panel */
+        .controls {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 16px;
+        }
+        
+        .controls button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+        
+        .controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+        
+        .controls button:active {
+            transform: translateY(0);
+        }
+        
+        .controls button.secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 16px rgba(240, 147, 251, 0.3);
+        }
+        
+        /* Step Indicator */
+        .step-indicator {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        .current-step {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+        }
+        
+        .step-description {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        .step-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: all 0.3s;
+        }
+        
+        .dot.active {
+            background: #667eea;
+            transform: scale(1.5);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+        
+        /* Legend */
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 30px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .legend-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+        
+        .legend-text {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>A2A Multi-Agent Orchestrator</h1>
+            <p class="subtitle">Interactive Architecture</p>
+        </header>
+        
+        <div class="step-indicator">
+            <div class="current-step" id="stepTitle">Step 1: User Query</div>
+            <div class="step-description" id="stepDescription">
+                User enters a question in the Streamlit UI: "What is the weather in Paris?"
+            </div>
+            <div class="step-dots">
+                <div class="dot active" data-step="0"></div>
+                <div class="dot" data-step="1"></div>
+                <div class="dot" data-step="2"></div>
+                <div class="dot" data-step="3"></div>
+                <div class="dot" data-step="4"></div>
+                <div class="dot" data-step="5"></div>
+                <div class="dot" data-step="6"></div>
+                <div class="dot" data-step="7"></div>
+            </div>
+        </div>
+        
+        <div class="architecture" id="architecture">
+            <svg id="connections"></svg>
+            
+            <!-- User Component -->
+            <div class="component user-component" id="user">
+                <div class="component-title">
+                    <span class="component-icon">👤</span>
+                    User
+                </div>
+                <div class="component-detail">Streamlit UI</div>
+                <div class="component-detail">Query Interface</div>
+                <div class="component-port">Port 8501</div>
+            </div>
+            
+            <!-- Orchestrator Component -->
+            <div class="component orchestrator-component" id="orchestrator">
+                <div class="component-title">
+                    <span class="component-icon">🧠</span>
+                    Orchestrator
+                </div>
+                <div class="component-detail">Smart Routing Engine</div>
+                <div class="component-detail">Discovery & Execution</div>
+                <div class="component-port">Port 5010</div>
+            </div>
+            
+            <!-- Context Forge Component -->
+            <div class="component cf-component" id="contextforge">
+                <div class="component-title">
+                    <span class="component-icon">🗄️</span>
+                    Context Forge
+                </div>
+                <div class="component-detail">MCP Gateway & Registry</div>
+                <div class="component-detail">Virtual Server Manager</div>
+                <div class="component-port">Port 4444</div>
+            </div>
+            
+            <!-- TRAVEL SUITE CONTAINER -->
+            <div class="vs-container vs-container-active">
+                <div class="container-label active">✅ TRAVEL-SUITE (ACTIVE)</div>
+                
+                <!-- Virtual Server Header -->
+                <div class="vs-header" id="vs-travel">
+                    <div class="vs-title">
+                        <span class="component-icon">🎯</span>
+                        travel-suite
+                    </div>
+                    <div class="vs-detail">✅ Weather Agent</div>
+                    <div class="vs-detail">✅ Calculator Agent</div>
+                    <div class="vs-detail">✅ Travel Agent</div>
+                    <div class="vs-badge">DISCOVERED</div>
+                </div>
+                
+                <!-- Agent Grid -->
+                <div class="agent-grid">
+                    <!-- Weather Agent -->
+                    <div class="agent-component" id="agent-weather">
+                        <div class="component-title">
+                            <span class="component-icon">🌤️</span>
+                            Weather
+                        </div>
+                        <ul class="skill-list">
+                            <li>get_current_weather</li>
+                            <li>get_forecast</li>
+                            <li>recommend_packing</li>
+                        </ul>
+                        <div class="component-port">Port 5001</div>
+                    </div>
+                    
+                    <!-- Calculator Agent -->
+                    <div class="agent-component" id="agent-calculator">
+                        <div class="component-title">
+                            <span class="component-icon">🔢</span>
+                            Calculator
+                        </div>
+                        <ul class="skill-list">
+                            <li>calculate</li>
+                            <li>convert_currency</li>
+                            <li>convert_temperature</li>
+                        </ul>
+                        <div class="component-port">Port 5002</div>
+                    </div>
+                    
+                    <!-- Travel Agent -->
+                    <div class="agent-component" id="agent-travel">
+                        <div class="component-title">
+                            <span class="component-icon">✈️</span>
+                            Travel
+                        </div>
+                        <ul class="skill-list">
+                            <li>recommend_destination</li>
+                            <li>get_travel_tips</li>
+                            <li>estimate_budget</li>
+                        </ul>
+                        <div class="component-port">Port 5003</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FINANCE SUITE CONTAINER -->
+            <div class="vs-container vs-container-inactive">
+                <div class="container-label inactive">❌ FINANCE-SUITE (NOT CONFIGURED)</div>
+                
+                <!-- Virtual Server Header -->
+                <div class="vs-header vs-header-inactive" id="vs-finance">
+                    <div class="vs-title">
+                        <span class="component-icon">💰</span>
+                        finance-suite
+                    </div>
+                    <div class="vs-detail">❌ Stock Agent</div>
+                    <div class="vs-detail">❌ Crypto Agent</div>
+                    <div class="vs-detail">❌ Banking Agent</div>
+                    <div class="vs-badge">IGNORED</div>
+                </div>
+                
+                <!-- Agent Grid -->
+                <div class="agent-grid">
+                    <!-- Stock Agent -->
+                    <div class="agent-component agent-inactive">
+                        <div class="component-title">
+                            <span class="component-icon">📈</span>
+                            Stock
+                        </div>
+                        <div class="component-detail">Not discovered</div>
+                        <div class="component-port">Port 6001</div>
+                    </div>
+                    
+                    <!-- Crypto Agent -->
+                    <div class="agent-component agent-inactive">
+                        <div class="component-title">
+                            <span class="component-icon">₿</span>
+                            Crypto
+                        </div>
+                        <div class="component-detail">Not discovered</div>
+                        <div class="component-port">Port 6002</div>
+                    </div>
+                    
+                    <!-- Banking Agent -->
+                    <div class="agent-component agent-inactive">
+                        <div class="component-title">
+                            <span class="component-icon">🏦</span>
+                            Banking
+                        </div>
+                        <div class="component-detail">Not discovered</div>
+                        <div class="component-port">Port 6003</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="playAnimation()" id="playBtn">▶️ Play Animation</button>
+            <button onclick="resetAnimation()" class="secondary">🔄 Reset</button>
+            <button onclick="nextStep()" class="secondary">Next Step →</button>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <div class="legend-text">User Interface</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                <div class="legend-text">Orchestrator</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                <div class="legend-text">Context Forge</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border: 3px solid #2ecc71;"></div>
+                <div class="legend-text">Active Virtual Server</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #e0e0e0; border: 3px dashed #bbb;"></div>
+                <div class="legend-text">Inactive Virtual Server</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                <div class="legend-text">Active A2A Agents</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #d0d0d0;"></div>
+                <div class="legend-text">Inactive A2A Agents</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const steps = [
+            {
+                title: "Step 1: User Query",
+                description: "User enters a question in the Streamlit UI: 'What is the weather in Paris?'",
+                active: ['user'],
+                connections: []
+            },
+            {
+                title: "Step 2: Orchestrator Receives Query",
+                description: "The orchestrator receives the query and prepares to discover available agents. It's configured to use the 'travel-suite' virtual server.",
+                active: ['user', 'orchestrator'],
+                connections: [{ from: 'user', to: 'orchestrator' }]
+            },
+            {
+                title: "Step 3: Query Context Forge",
+                description: "Orchestrator sends request to Context Forge: GET /servers/travel-suite/agents",
+                active: ['orchestrator', 'contextforge'],
+                connections: [{ from: 'orchestrator', to: 'contextforge' }]
+            },
+            {
+                title: "Step 4: Virtual Server Filtering",
+                description: "Context Forge returns ONLY agents in 'travel-suite'. The 'finance-suite' is ignored because it's not configured in the orchestrator.",
+                active: ['contextforge', 'vs-travel'],
+                connections: [{ from: 'contextforge', to: 'vs-travel' }]
+            },
+            {
+                title: "Step 5: Fetch AgentCards",
+                description: "Orchestrator fetches AgentCards from Weather, Calculator, and Travel agents (ONLY from travel-suite) to discover their skills.",
+                active: ['orchestrator', 'agent-weather', 'agent-calculator', 'agent-travel'],
+                connections: [
+                    { from: 'orchestrator', to: 'agent-weather' },
+                    { from: 'orchestrator', to: 'agent-calculator' },
+                    { from: 'orchestrator', to: 'agent-travel' }
+                ]
+            },
+            {
+                title: "Step 6: Build Skill Cache",
+                description: "Orchestrator builds a local cache mapping skills to agents. Now it knows which agent can handle 'weather' queries. Finance agents are NOT in the cache.",
+                active: ['orchestrator'],
+                connections: []
+            },
+            {
+                title: "Step 7: Smart Routing & Execution",
+                description: "Query 'weather in Paris' is matched to Weather Agent. Orchestrator executes the agent with JSON-RPC call.",
+                active: ['orchestrator', 'agent-weather'],
+                connections: [{ from: 'orchestrator', to: 'agent-weather' }]
+            },
+            {
+                title: "Step 8: Return Answer to User",
+                description: "Weather Agent responds with 'Paris: 12°C, Rainy, 80% humidity'. Answer is displayed in Streamlit UI. Total query time: 145ms",
+                active: ['agent-weather', 'orchestrator', 'user'],
+                connections: [
+                    { from: 'agent-weather', to: 'orchestrator' },
+                    { from: 'orchestrator', to: 'user' }
+                ]
+            }
+        ];
+        
+        let currentStep = 0;
+        let animationInterval;
+        
+        function getCenterPoint(element) {
+            const rect = element.getBoundingClientRect();
+            const architectureRect = document.getElementById('architecture').getBoundingClientRect();
+            
+            return {
+                x: rect.left + rect.width / 2 - architectureRect.left,
+                y: rect.top + rect.height / 2 - architectureRect.top
+            };
+        }
+        
+        function updateStep(stepIndex) {
+            currentStep = stepIndex;
+            const step = steps[stepIndex];
+            
+            // Update text
+            document.getElementById('stepTitle').textContent = step.title;
+            document.getElementById('stepDescription').textContent = step.description;
+            
+            // Update dots
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === stepIndex);
+            });
+            
+            // Update active components
+            document.querySelectorAll('.component, .agent-component, .vs-header').forEach(comp => {
+                comp.classList.remove('active');
+            });
+            step.active.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.add('active');
+                }
+            });
+            
+            // Draw connections
+            drawConnections(step.connections);
+        }
+        
+        function drawConnections(connections) {
+            const svg = document.getElementById('connections');
+            svg.innerHTML = '';
+            
+            connections.forEach(conn => {
+                const fromEl = document.getElementById(conn.from);
+                const toEl = document.getElementById(conn.to);
+                
+                if (!fromEl || !toEl) return;
+                
+                const fromPoint = getCenterPoint(fromEl);
+                const toPoint = getCenterPoint(toEl);
+                
+                // Create curved path
+                const controlY = (fromPoint.y + toPoint.y) / 2;
+                const d = `M ${fromPoint.x} ${fromPoint.y} Q ${fromPoint.x} ${controlY} ${toPoint.x} ${toPoint.y}`;
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', d);
+                path.setAttribute('class', 'connection active');
+                path.setAttribute('stroke-dasharray', '15 10');
+                svg.appendChild(path);
+                
+                // Add animated pulse at destination
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', toPoint.x);
+                circle.setAttribute('cy', toPoint.y);
+                circle.setAttribute('r', 10);
+                circle.setAttribute('class', 'pulse active');
+                svg.appendChild(circle);
+            });
+        }
+        
+        function playAnimation() {
+            resetAnimation();
+            animationInterval = setInterval(() => {
+                if (currentStep < steps.length - 1) {
+                    updateStep(currentStep + 1);
+                } else {
+                    clearInterval(animationInterval);
+                }
+            }, 3000);
+        }
+        
+        function resetAnimation() {
+            clearInterval(animationInterval);
+            updateStep(0);
+        }
+        
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                updateStep(currentStep + 1);
+            }
+        }
+        
+        // Initialize
+        updateStep(0);
+        
+        // Redraw connections on window resize
+        window.addEventListener('resize', () => {
+            if (steps[currentStep]) {
+                drawConnections(steps[currentStep].connections);
+            }
+        });
+    </script>
+</body>
+</html>
