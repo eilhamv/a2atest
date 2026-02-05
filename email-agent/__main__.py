@@ -85,13 +85,27 @@ if __name__ == '__main__':
     )
     
     # Create A2A server application
-    server = A2AStarletteApplication(
+    app = server = A2AStarletteApplication(
         agent_card=agent_card,
         http_handler=request_handler,
     )
     
+    # Build the Starlette app
+    starlette_app = server.build()
+    
+    # Add health check endpoint for Railway
+    from starlette.responses import JSONResponse
+    from starlette.routing import Route
+    
+    async def health_check(request):
+        return JSONResponse({"status": "healthy", "service": "email-agent"})
+    
+    # Add health route to the app
+    starlette_app.routes.append(Route('/health', health_check))
+    
     print(f"📧 Email Agent (Remote SaaS) starting on {base_url}")
     print(f"📋 AgentCard: {base_url}/.well-known/agent.json")
+    print(f"🏥 Health check: {base_url}/health")
     print("✨ This agent simulates a remote SaaS email service")
     if railway_url:
         print(f"🚀 Deployed on Railway: https://{railway_url}")
@@ -99,6 +113,6 @@ if __name__ == '__main__':
         print("🚀 Running locally - ready to be deployed to Railway.app!")
     
     # Start server
-    uvicorn.run(server.build(), host='0.0.0.0', port=port)
+    uvicorn.run(starlette_app, host='0.0.0.0', port=port)
 
 # Made with Bob
