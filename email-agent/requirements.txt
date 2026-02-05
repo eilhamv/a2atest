@@ -1,12 +1,17 @@
 # A2A Protocol SDK
 a2a-sdk
 
-# Web server
-uvicorn
+# Web server and SSE support
 starlette
+sse-starlette
+uvicorn
 
-# Type hints
+# HTTP and async support
+httpx
+httpx-sse
 typing-extensions
 
-# Async support
-httpx
+# Additional dependencies
+pydantic
+google-api-core
+protobuf
