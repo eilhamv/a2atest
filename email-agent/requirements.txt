@@ -1,12 +1,12 @@
 # A2A Protocol SDK
-a2a-python>=0.3.0
+a2a-python
 
 # Web server
-uvicorn>=0.30.0
-starlette>=0.37.0
+uvicorn
+starlette
 
 # Type hints
-typing-extensions>=4.12.0
+typing-extensions
 
 # Async support
-httpx>=0.27.0
+httpx
