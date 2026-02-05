@@ -1,5 +1,5 @@
 # A2A Protocol SDK
-a2a-python
+a2a-sdk
 
 # Web server
 uvicorn
